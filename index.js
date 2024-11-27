@@ -1,25 +1,23 @@
 const express = require('express');
 const app = require('./src/app');
-const PORT = 3001;
 const mongoose = require('mongoose');
 
+// Load environment variables
+require('dotenv').config();
 
+// Use the port provided by the environment or default to 3001
+const PORT = process.env.PORT || 3001;
 
-// Replace with your MongoDB connection string
+// MongoDB connection string from environment variables
+const DB_URI = process.env.DB_URI || 'your-default-mongodb-uri-here';
 
+// Connect to MongoDB
+mongoose
+  .connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Database connected successfully'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-const DB_URI = 'mongodb+srv://malikshahmeer:HasHn36WriD5haeY@cluster0.jcb6y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0e';
-
-mongoose.connect(DB_URI)
-    .then(() => console.log('Database connected successfully'))
-    .catch(err => console.error('MongoDB connection error:', err));
-
-
-
-
-
-
-
+// Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
